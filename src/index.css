@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;1,500&display=swap");
+
+@layer components {
+  .message {
+    @apply flex items-end py-2 text-xs sm:text-base;
+  }
+
+  .sent {
+    @apply justify-end;
+  }
+  .sent > div {
+    @apply flex-row-reverse flex-shrink-0;
+  }
+
+  .sent > div > div {
+    @apply flex-col;
+  }
+
+  .received > div {
+    @apply items-baseline;
+  }
+  .received > div > section {
+    @apply mt-2 bg-gray-800 text-white;
+  }
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+}
+
+textarea::-webkit-scrollbar {
+  width: 5px;
+}
