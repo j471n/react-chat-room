@@ -6,7 +6,7 @@
 
 @layer components {
   .message {
-    @apply flex items-end py-2 text-xs sm:text-base;
+    @apply flex items-end mb-0.5 text-xs sm:text-base;
   }
 
   .sent {
@@ -15,7 +15,9 @@
   .sent > div {
     @apply flex-row-reverse flex-shrink-0;
   }
-
+  .sent > div > section {
+    @apply mt-1;
+  }
   .sent > div > div {
     @apply flex-col;
   }
@@ -24,14 +26,14 @@
     @apply items-baseline;
   }
   .received > div > section {
-    @apply mt-2 bg-gray-800 text-white;
+    @apply mt-0.5 bg-gray-800 text-white;
   }
 }
 
-body::-webkit-scrollbar {
-  width: 0;
-}
+*::-webkit-scrollbar {
+  width: 10px;
 
-textarea::-webkit-scrollbar {
-  width: 5px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #999;
 }
