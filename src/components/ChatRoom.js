@@ -18,8 +18,7 @@ const ChatRoom = ({ user }) => {
   const [sendButton, setSendButton] = useState(false);
   const [imageToSend, setImageToSend] = useState(null);
   const filePickerRef = useRef();
-  // const messageEl = useRef();
-  // const [loading, setLoading] = useState(true);
+  let lastSenderId = undefined;
 
   const dummy = useRef(null);
 
@@ -109,7 +108,7 @@ const ChatRoom = ({ user }) => {
       });
 
     // dummy.current.scrollIntoView({ behaviour: "smooth" });
-    // scrollToBottom()
+    scrollToBottom()
     setText("");
   }
 
@@ -144,9 +143,8 @@ const ChatRoom = ({ user }) => {
     scrollToBottom();
   }
 
-  // console.log(imageToSend);
   return (
-    <div className="flex flex-col w-full h-full relative lg:mx-auto lg:my-0">
+    <div className="flex flex-col w-full h-screen justify-between relative lg:mx-auto lg:my-0">
       {/* Navbar */}
 
       <Navbar user={user} />
@@ -156,28 +154,40 @@ const ChatRoom = ({ user }) => {
       <div className="flex flex-col px-3 lg:px-20 overflow-x-hidden">
         {messages &&
           messages.map((message) => {
-            return <Message key={message.id} user={user} data={message.data} />;
+            let showName = !lastSenderId || message.data.uid !== lastSenderId;
+            lastSenderId = message.data.uid;
+            return (
+              <Message
+                key={message.id}
+                showDetails={showName}
+                user={user}
+                data={message.data}
+              />
+            );
           })}
 
+        {/* Preview Image */}
         {imageToSend && (
-          <div className="md:mx-auto my-0 h-full p-2 bg-blue-500 relative rounded-tl-xl rounded-tr-xl cursor-pointer-ml-3">
-            <XCircleIcon
-              className="w-7 h-7 mb-2 text-red-500"
-              onClick={() => setImageToSend(null)}
-            />
+          <div className="md:mx-auto my-0  p-2 bg-blue-500 relative rounded-tl-xl rounded-tr-xl cursor-pointer-ml-3">
+            <div className="flex mb-2 items-center">
+              <XCircleIcon
+                className="w-7 h-7 text-red-500 mr-2"
+                onClick={() => setImageToSend(null)}
+              />
 
+              <p>Preview</p>
+            </div>
             <img className="rounded-md" src={imageToSend} height={100} alt="" />
           </div>
         )}
-      </div>
 
-      <div ref={dummy}></div>
-      {/* Preview Image */}
+        <div ref={dummy}></div>
+      </div>
 
       {/* dummy div */}
       {/* input form */}
       <form
-        className="sticky bottom-0 z-50 bg-gray-600 dark:text-black  px-4 py-2 flex justify-center items-center"
+        className="sticky bottom-0 z-50 bg-gray-600 dark:text-black  px-4 py-2 flex justify-center items-center mt-2"
         onSubmit={sendMessage}
       >
         <textarea
@@ -185,7 +195,7 @@ const ChatRoom = ({ user }) => {
           placeholder="Type a message..."
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="flex items-center max-w-full w-full h-11 max-h-16 md:w-9/12 py-2 px-5 rounded-full placeholder-gray-500 outline-none resize-none"
+          className="flex items-center max-w-full w-full h-10 max-h-44 md:w-9/12 py-2 px-5 rounded-full placeholder-gray-500 outline-none resize-none flex-grow"
         />
 
         {/* Submit Button */}
