@@ -4,12 +4,12 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'poppins' : ['Poppins', 'sans-serif'],
-      }
+        poppins: ["Poppins", "sans-serif"],
+      },
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
