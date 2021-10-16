@@ -7,21 +7,25 @@ import {
   PlusIcon,
   XCircleIcon,
 } from "@heroicons/react/solid";
-import Compressor from "compressorjs";
 import Navbar from "./Navbar";
 
-// import {ImageCo}
-
 const ChatRoom = ({ user }) => {
+  // to get the messages and store it here
   const [messages, setMessages] = useState([]);
+  // Current input field value
   const [text, setText] = useState("");
+  // is send button enable or not
   const [sendButton, setSendButton] = useState(false);
+  // do we have an image to send or not
   const [imageToSend, setImageToSend] = useState(null);
+  // reference to the filePicker to send the image file
   const filePickerRef = useRef();
+  // dummy reference just to scroll
+  const dummy = useRef(null);
+  // the last image senderID
   let lastSenderId = undefined;
 
-  const dummy = useRef(null);
-
+  // This fetch all the messages from the firebase db and set it the message state
   useEffect(() => {
     const unsubscribe = db
       .collection("messages")
@@ -39,6 +43,8 @@ const ChatRoom = ({ user }) => {
     return unsubscribe;
   }, []);
 
+  // this identify isSendButton enable or not
+  // if input field has a value or the image is selected only then it enables it
   useEffect(() => {
     if (text || imageToSend) {
       setSendButton(true);
@@ -47,24 +53,31 @@ const ChatRoom = ({ user }) => {
     }
   }, [text, imageToSend]);
 
+  /* function just to scroll to the bottom to the dummy div */
   function scrollToBottom() {
     dummy.current.scrollIntoView({ behavior: "smooth" });
   }
 
+  // Scroll every time as we send the messages
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
+  // it clicks the filePicker ref because we don't want to show the actual file input field
   function filePicker(e) {
     e.preventDefault();
     filePickerRef.current.click();
   }
 
+  // It send the message to the firebase storage
   function sendMessage(e) {
     e.preventDefault();
 
+    // Checking if text or image is empty then don't send the message
     if (!text && !imageToSend) return null;
 
+
+    // Adding the data to the messages collection 
     db.collection("messages")
       .add({
         text: text || "",
@@ -76,7 +89,6 @@ const ChatRoom = ({ user }) => {
       .then((doc) => {
         if (imageToSend) {
           // upload the image coming from the user
-
           // encoding the image to data_url and uploading as data-url
           const uploadTask = storage
             .ref(`messages/${doc.id}`)
@@ -107,66 +119,52 @@ const ChatRoom = ({ user }) => {
         }
       });
 
-    // dummy.current.scrollIntoView({ behaviour: "smooth" });
-    scrollToBottom()
+    scrollToBottom();
     setText("");
   }
 
   function addImageToSend(e) {
-    const reader = new FileReader();
 
+    const reader = new FileReader();
+    // reading the file path
     const file = e.target.files[0];
 
-    if (!file) {
-      return;
-    }
+    // if file is not selected then return null
+    if (!file) return null
 
-    new Compressor(file, {
-      quality: 0.6,
-
-      // The compression process is asynchronous,
-      // which means you have to access the `result` in the `success` hook function.
-      success(res) {
-        // console.log(result);
-        // The third parameter is required for server
-        // formData.append("file", result);
-        // console.log(formData);
-        reader.readAsDataURL(res);
-        reader.onload = (readerEvent) =>
-          setImageToSend(readerEvent.target.result);
-      },
-      error(err) {
-        console.log(err.message);
-      },
-    });
-
+    // converting it to the DataURl
+    reader.readAsDataURL(file);
+    reader.onload = (readerEvent) => setImageToSend(readerEvent.target.result);
     scrollToBottom();
   }
 
   return (
     <div className="flex flex-col w-full h-screen justify-between relative lg:mx-auto lg:my-0">
       {/* Navbar */}
-
       <Navbar user={user} />
 
       {/* main Chat content */}
-
       <div className="flex flex-col px-3 lg:px-20 overflow-x-hidden">
         {messages &&
           messages.map((message) => {
-            let showName = !lastSenderId || message.data.uid !== lastSenderId;
+
+            // It checks do we need to show the name of the sender or not
+            // It determines the is lastMessageSender or the CurrentMessageSender are the same 
+            // if they are same then don't show the details
+            // else show the details
+            let showDetails = !lastSenderId || message.data.uid !== lastSenderId;
             lastSenderId = message.data.uid;
             return (
               <Message
                 key={message.id}
-                showDetails={showName}
+                showDetails={showDetails}
                 user={user}
                 data={message.data}
               />
             );
           })}
 
-        {/* Preview Image */}
+        {/* Preview Image - before sending we use the preview */} 
         {imageToSend && (
           <div className="md:mx-auto my-0  p-2 bg-blue-500 relative rounded-tl-xl rounded-tr-xl cursor-pointer-ml-3">
             <div className="flex mb-2 items-center">
@@ -174,17 +172,16 @@ const ChatRoom = ({ user }) => {
                 className="w-7 h-7 text-red-500 mr-2"
                 onClick={() => setImageToSend(null)}
               />
-
               <p>Preview</p>
             </div>
             <img className="rounded-md" src={imageToSend} height={100} alt="" />
           </div>
         )}
 
+        {/* Dummy div onScrollBottom we scroll to here */}
         <div ref={dummy}></div>
       </div>
 
-      {/* dummy div */}
       {/* input form */}
       <form
         className="sticky bottom-0 z-50 bg-gray-600 dark:text-black  px-4 py-2 flex justify-center items-center mt-2"
@@ -198,7 +195,11 @@ const ChatRoom = ({ user }) => {
           className="flex items-center max-w-full w-full h-10 max-h-44 md:w-9/12 py-2 px-5 rounded-full placeholder-gray-500 outline-none resize-none flex-grow"
         />
 
-        {/* Submit Button */}
+        {/* 
+          Submit Button 
+          - if the text is empty only then show the filePicker
+          - otherwise show the send button  
+        */}
         <button
           className="p-2 text-white bg-green-400 h-full rounded-full ml-2"
           type="submit"
@@ -211,7 +212,7 @@ const ChatRoom = ({ user }) => {
           )}
         </button>
 
-        {/* Ref of File picker */}
+        {/* Ref of File picker and hidden*/}
         <input
           ref={filePickerRef}
           onChange={addImageToSend}

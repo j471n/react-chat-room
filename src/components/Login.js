@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { auth, googleProvider } from "../services/firebase";
 import Loading from "./Loading/Loading";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+
   async function signInWithGoogle() {
+    /*  async function to login with the google
+        - if all good then it will login and show the chatRoom defined in index.js
+        - otherwise it will prompt the error in the toast form
+    */
     setLoading(true);
 
     await auth

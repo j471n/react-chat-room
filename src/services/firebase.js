@@ -3,6 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage"
 
+// Firebase Configs
 const firebaseConfig = {
   apiKey: "AIzaSyCNexJ7p00a9cCe_NCvlN0CfFw7xx0_-kc",
   authDomain: "chat-room-18213.firebaseapp.com",
@@ -12,6 +13,7 @@ const firebaseConfig = {
   appId: "1:637500390783:web:d99c8fec19a075a2b8ee4a",
 };
 
+// Checking if app already initialize then don't initialize again
 const app = !firebase.apps.length
   ? firebase.initializeApp(firebaseConfig)
   : firebase.app();

@@ -8,16 +8,18 @@ function App() {
   const [user, setUser] = useState(() => auth.currentUser);
   const [initializing, setInitializing] = useState(true);
 
+
+  // It is to determine that the is user already logged in or not if yes then set the user
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      // user ? setUser(user) : setUser(null);
+
       if (user) {
         setUser(user);
       } else {
         setUser(null);
       }
-      // else
 
+      // it shows the loading till we fetch the user
       if (initializing) {
         setInitializing(false);
       }
@@ -27,19 +29,12 @@ function App() {
     return unsubscribe;
   }, [initializing]);
 
+  // Return the Loading Component if initializing is true
   if (initializing) return <Loading />;
 
   return (
     <div className="min-h-screen min-w-screen bg-blue-100 dark:bg-gray-700 dark:text-white">
-      {!user ? (
-        <Login />
-      ) : (
-        <ChatRoom
-          user={user}
-          // signOut={}
-          // sendMessage={sendMessage}
-        />
-      )}
+      {!user ? <Login /> : <ChatRoom user={user} />}
     </div>
   );
 }
