@@ -39,7 +39,7 @@ const Login = () => {
           className="flex items-center w-9/12 sm:w-96 py-2 px-4 m-2 bg-gray-200 rounded-md  font-medium shadow-md lg:hover:bg-blue-500 lg:hover:text-white dark:text-black"
           onClick={signInWithGoogle}
         >
-          <img src={"https://rb.gy/dgz5ha"} width={30} height={30} alt="" />
+          <img src="https://cdn.iconscout.com/icon/free/png-256/google-152-189813.png" width={30} height={30} alt="" />
           <p className="text-center w-full">Login with Google</p>
         </button>
 
