@@ -7,6 +7,7 @@ import {
   PlusIcon,
   XCircleIcon,
 } from "@heroicons/react/solid";
+import { PhotographIcon } from "@heroicons/react/outline";
 import Navbar from "./Navbar";
 
 const ChatRoom = ({ user }) => {
@@ -18,8 +19,10 @@ const ChatRoom = ({ user }) => {
   const [sendButton, setSendButton] = useState(false);
   // do we have an image to send or not
   const [imageToSend, setImageToSend] = useState(null);
+  // To show the send menu
+  const [showMenu, setShowMenu] = useState(false);
   // reference to the filePicker to send the image file
-  const filePickerRef = useRef();
+  const imagePickerRef = useRef();
   // dummy reference just to scroll
   const dummy = useRef(null);
   // the last image senderID
@@ -64,9 +67,10 @@ const ChatRoom = ({ user }) => {
   }, [messages]);
 
   // it clicks the filePicker ref because we don't want to show the actual file input field
-  function filePicker(e) {
+  function imagePicker(e) {
     e.preventDefault();
-    filePickerRef.current.click();
+    imagePickerRef.current.click();
+    setShowMenu(false);
   }
 
   // It send the message to the firebase storage
@@ -76,8 +80,7 @@ const ChatRoom = ({ user }) => {
     // Checking if text or image is empty then don't send the message
     if (!text && !imageToSend) return null;
 
-
-    // Adding the data to the messages collection 
+    // Adding the data to the messages collection
     db.collection("messages")
       .add({
         text: text || "",
@@ -124,13 +127,12 @@ const ChatRoom = ({ user }) => {
   }
 
   function addImageToSend(e) {
-
     const reader = new FileReader();
     // reading the file path
     const file = e.target.files[0];
 
     // if file is not selected then return null
-    if (!file) return null
+    if (!file) return null;
 
     // converting it to the DataURl
     reader.readAsDataURL(file);
@@ -139,20 +141,20 @@ const ChatRoom = ({ user }) => {
   }
 
   return (
-    <div className="flex flex-col w-full h-screen justify-between relative lg:mx-auto lg:my-0">
+    <div className="flex flex-col w-full h-screen justify-between relative lg:mx-auto lg:my-0 ">
       {/* Navbar */}
       <Navbar user={user} />
 
       {/* main Chat content */}
-      <div className="flex flex-col px-3 lg:px-20 overflow-x-hidden">
+      <div className="flex flex-col px-3 lg:px-20 overflow-x-hidden scrollbar-hide h-4/5">
         {messages &&
           messages.map((message) => {
-
             // It checks do we need to show the name of the sender or not
-            // It determines the is lastMessageSender or the CurrentMessageSender are the same 
+            // It determines the is lastMessageSender or the CurrentMessageSender are the same
             // if they are same then don't show the details
             // else show the details
-            let showDetails = !lastSenderId || message.data.uid !== lastSenderId;
+            let showDetails =
+              !lastSenderId || message.data.uid !== lastSenderId;
             lastSenderId = message.data.uid;
             return (
               <Message
@@ -164,7 +166,7 @@ const ChatRoom = ({ user }) => {
             );
           })}
 
-        {/* Preview Image - before sending we use the preview */} 
+        {/* Preview Image - before sending we use the preview */}
         {imageToSend && (
           <div className="md:mx-auto my-0  p-2 bg-blue-500 relative rounded-tl-xl rounded-tr-xl cursor-pointer-ml-3">
             <div className="flex mb-2 items-center">
@@ -184,7 +186,7 @@ const ChatRoom = ({ user }) => {
 
       {/* input form */}
       <form
-        className="sticky bottom-0 z-50 bg-gray-600 dark:text-black  px-4 py-2 flex justify-center items-center mt-2"
+        className="sticky bottom-0 z-50 bg-gray-600 dark:text-black px-4 py-2 flex justify-center items-center mt-2"
         onSubmit={sendMessage}
       >
         <textarea
@@ -192,7 +194,7 @@ const ChatRoom = ({ user }) => {
           placeholder="Type a message..."
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="flex items-center max-w-full w-full h-10 max-h-44 md:w-9/12 py-2 px-5 rounded-full placeholder-gray-500 outline-none resize-none flex-grow"
+          className="flex items-center max-w-full w-full h-10 max-h-44 lg:max-w-screen-md py-2 px-5 rounded-full placeholder-gray-500 outline-none resize-none flex-grow scrollbar-hide"
         />
 
         {/* 
@@ -203,7 +205,7 @@ const ChatRoom = ({ user }) => {
         <button
           className="p-2 text-white bg-green-400 h-full rounded-full ml-2"
           type="submit"
-          onClick={sendButton ? sendMessage : filePicker}
+          onClick={sendButton ? sendMessage : () => setShowMenu(!showMenu)}
         >
           {sendButton ? (
             <ArrowCircleRightIcon className="w-7 h-7" />
@@ -214,13 +216,32 @@ const ChatRoom = ({ user }) => {
 
         {/* Ref of File picker and hidden*/}
         <input
-          ref={filePickerRef}
+          ref={imagePickerRef}
           onChange={addImageToSend}
           type="file"
           accept="image/*"
           hidden
         />
       </form>
+
+      <div
+        className={`${
+          !showMenu
+            ? "opacity-0 h-0  overflow-hidden"
+            : "opacity-100 h-auto m-1"
+        } flex justify-center items-center transition-opacity duration-500 ease-in-out `}
+      >
+        <div className="flex items-center">
+          {/* Photo Picker Container */}
+          <div
+            className="p-6 bg-transparent hover:bg-blue-400 border-2 text-blue-400 border-blue-400 border-solid hover:text-white rounded-md cursor-pointer m-1"
+            onClick={imagePicker}
+          >
+            <PhotographIcon className="base-icon" />
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 };
