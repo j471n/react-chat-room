@@ -28,12 +28,7 @@
   .received > div > section {
     @apply mt-0.5 bg-gray-800 text-white;
   }
-}
-
-*::-webkit-scrollbar {
-  width: 10px;
-
-}
-*::-webkit-scrollbar-thumb {
-  background: #999;
+  .base-icon{
+    @apply h-8 w-8;
+  }
 }
