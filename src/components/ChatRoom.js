@@ -5,7 +5,6 @@ import firebase from "firebase";
 import {
   ArrowCircleRightIcon,
   PlusIcon,
-  XCircleIcon,
 } from "@heroicons/react/solid";
 import { PhotographIcon } from "@heroicons/react/outline";
 import Navbar from "./Navbar";
