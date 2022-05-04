@@ -13,8 +13,8 @@ const Message = ({ user, data, showDetails }) => {
   // Checking the current logged in user is the sender of current message
   const isUserSender = user.uid === data.uid;
 
-  const defaultImg =
-    "https://worldgovernmentmovement.org/wp-content/uploads/2021/05/profilepic.jpg";
+  const defaultImg = "https://rb.gy/eqezqj";
+  const IMAGE_404 = "https://rb.gy/eyjcz3";
 
   return (
     <div className={`message ${isUserSender ? "sent" : "received"}`}>
@@ -42,7 +42,9 @@ const Message = ({ user, data, showDetails }) => {
 
         {/* Message Container */}
         <section
-          className={`text-sm bg-blue-500 max-w-xs text-white p-2 relative rounded-xl sm:max-w-lg flex flex-col shadow-md ${!isUserSender && !showDetails && " -mt-6"}`}
+          className={`text-sm bg-blue-500 max-w-xs text-white p-2 relative rounded-xl sm:max-w-lg flex flex-col shadow-md ${
+            !isUserSender && !showDetails && " -mt-6"
+          }`}
         >
           {/* If the user sended the image then show the image in the message */}
           {data.sendImage && (
@@ -50,12 +52,23 @@ const Message = ({ user, data, showDetails }) => {
               className="rounded-md max-h-full max-w-full mb-2"
               src={data.sendImage}
               alt=""
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = IMAGE_404;
+              }}
             />
           )}
           <p className="break-all">{data.text}</p>
           <div className="text-xs font-mono text-gray-300 flex justify-end items-center pt-0.5">
             {data.createdAt && (
-              <p>{new Date(data.createdAt?.toDate()).toTimeString().slice(0, 5)}</p>
+              <p>
+                {new Date(data.createdAt?.toDate())
+                  .toDateString()
+                  .slice(4, 10) + ", " +
+                  new Date(data.createdAt?.toDate())
+                    .toTimeString()
+                    .slice(0,5)}
+              </p>
             )}
 
             {isUserSender && (

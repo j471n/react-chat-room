@@ -5,10 +5,10 @@ import firebase from "firebase";
 import {
   ArrowCircleRightIcon,
   PlusIcon,
-  XCircleIcon,
 } from "@heroicons/react/solid";
 import { PhotographIcon } from "@heroicons/react/outline";
 import Navbar from "./Navbar";
+import PreviewImage from "../components/PreviewImage";
 
 const ChatRoom = ({ user }) => {
   // to get the messages and store it here
@@ -27,6 +27,8 @@ const ChatRoom = ({ user }) => {
   const dummy = useRef(null);
   // the last image senderID
   let lastSenderId = undefined;
+  // For the progress bar
+  const [uploadProgress, setUploadProgress] = useState(null);
 
   // This fetch all the messages from the firebase db and set it the message state
   useEffect(() => {
@@ -91,13 +93,21 @@ const ChatRoom = ({ user }) => {
       })
       .then((doc) => {
         if (imageToSend) {
+          setUploadProgress(0);
+
           // upload the image coming from the user
           // encoding the image to data_url and uploading as data-url
           const uploadTask = storage
             .ref(`messages/${doc.id}`)
             .putString(imageToSend, "data_url");
 
-          setImageToSend(null);
+          // Getting the Upload Progress to show Loading
+          uploadTask.on("state_change", (snap) => {
+            const percentUploaded = Math.round(
+              (snap.bytesTransferred / snap.totalBytes) * 100
+            );
+            setUploadProgress(percentUploaded);
+          });
 
           uploadTask.on(
             "state_change",
@@ -116,6 +126,12 @@ const ChatRoom = ({ user }) => {
                     },
                     { merge: true }
                   );
+                })
+                .then(() => {
+                  setTimeout(() => {
+                    setImageToSend(null);
+                    setUploadProgress(null);
+                  }, 1000);
                 });
             }
           );
@@ -168,16 +184,11 @@ const ChatRoom = ({ user }) => {
 
         {/* Preview Image - before sending we use the preview */}
         {imageToSend && (
-          <div className="md:mx-auto my-0  p-2 bg-blue-500 relative rounded-tl-xl rounded-tr-xl cursor-pointer-ml-3">
-            <div className="flex mb-2 items-center">
-              <XCircleIcon
-                className="w-7 h-7 text-red-500 mr-2"
-                onClick={() => setImageToSend(null)}
-              />
-              <p>Preview</p>
-            </div>
-            <img className="rounded-md" src={imageToSend} height={100} alt="" />
-          </div>
+          <PreviewImage
+            src={imageToSend}
+            cancel={() => setImageToSend(null)}
+            progress={uploadProgress}
+          />
         )}
 
         {/* Dummy div onScrollBottom we scroll to here */}
@@ -239,7 +250,6 @@ const ChatRoom = ({ user }) => {
           >
             <PhotographIcon className="base-icon" />
           </div>
-
         </div>
       </div>
     </div>
