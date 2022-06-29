@@ -2,10 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import { db, storage } from "../services/firebase";
 import firebase from "firebase";
-import {
-  ArrowCircleRightIcon,
-  PlusIcon,
-} from "@heroicons/react/solid";
+import { ArrowCircleRightIcon, PlusIcon } from "@heroicons/react/solid";
 import { PhotographIcon } from "@heroicons/react/outline";
 import Navbar from "./Navbar";
 import PreviewImage from "../components/PreviewImage";
@@ -35,7 +32,7 @@ const ChatRoom = ({ user }) => {
     const unsubscribe = db
       .collection("messages")
       .orderBy("createdAt")
-      .limit(100)
+      // .limit(100)
       .onSnapshot((snapshot) => {
         setMessages(
           snapshot.docs.map((doc) => ({
@@ -162,7 +159,7 @@ const ChatRoom = ({ user }) => {
       <Navbar user={user} />
 
       {/* main Chat content */}
-      <div className="flex flex-col px-3 lg:px-20 overflow-x-hidden scrollbar-hide h-4/5">
+      <div className="flex flex-col px-3 lg:px-20 overflow-x-hidden  h-4/5">
         {messages &&
           messages.map((message) => {
             // It checks do we need to show the name of the sender or not
@@ -214,7 +211,7 @@ const ChatRoom = ({ user }) => {
           - otherwise show the send button  
         */}
         <button
-          className="p-2 text-white bg-green-400 h-full rounded-full ml-2"
+          className="p-2 text-white bg-blue-500 h-full rounded-full ml-2"
           type="submit"
           onClick={sendButton ? sendMessage : () => setShowMenu(!showMenu)}
         >

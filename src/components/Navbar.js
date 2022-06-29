@@ -9,7 +9,7 @@ const Navbar = ({ user }) => {
       <div className="flex rounded-full p-2 pr-3">
         <img className="rounded-full w-10 h-10" src={user.photoURL} alt="" />
         <div className="ml-2">
-          <p className="font-medium">{user.displayName}</p>
+          <p className="font-medium font-barlow">{user.displayName}</p>
           <p className="text-xs">{user.email}</p>
         </div>
       </div>

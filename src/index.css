@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@400;600;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300;400;500;600&display=swap");
 
 @layer components {
   .message {
@@ -28,7 +29,13 @@
   .received > div > section {
     @apply mt-0.5 bg-gray-800 text-white;
   }
-  .base-icon{
+  .base-icon {
     @apply h-8 w-8;
+  }
+}
+
+@layer base {
+  a {
+    @apply underline;
   }
 }
