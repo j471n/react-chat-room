@@ -35,7 +35,6 @@ const ChatRoom = ({ user }) => {
     const unsubscribe = db
       .collection("messages")
       .orderBy("createdAt")
-      .limit(100)
       .onSnapshot((snapshot) => {
         setMessages(
           snapshot.docs.map((doc) => ({
