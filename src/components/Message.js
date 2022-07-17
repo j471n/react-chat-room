@@ -59,20 +59,24 @@ const Message = ({ user, data, showDetails }) => {
             />
           )}
           <p className="break-all">{data.text}</p>
-          <div className="text-xs font-mono text-gray-300 flex justify-end items-center pt-0.5">
+          <div
+            style={{ fontSize: "10px" }}
+            className="font-mono text-gray-300 flex justify-end items-center pt-0.5"
+          >
             {data.createdAt && (
               <p>
                 {new Date(data.createdAt?.toDate())
                   .toDateString()
-                  .slice(4, 10) + ", " +
-                  new Date(data.createdAt?.toDate())
-                    .toTimeString()
-                    .slice(0,5)}
+                  .slice(4, 10) +
+                  ", " +
+                  new Date(data.createdAt?.toDate()).toTimeString().slice(0, 5)}
               </p>
             )}
 
             {isUserSender && (
-              <p className="ml-1 text-white"><CheckCircleIcon className="w-4 h-4" /></p>
+              <p className="ml-1 text-white">
+                <CheckCircleIcon className="w-4 h-4" />
+              </p>
             )}
           </div>
         </section>
