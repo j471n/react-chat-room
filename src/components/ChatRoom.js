@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import { db, storage } from "../services/firebase";
 import firebase from "firebase";
-import { ArrowCircleRightIcon, PlusIcon, PaperAirplaneIcon } from "@heroicons/react/solid";
+import {
+  ArrowCircleRightIcon,
+  PlusIcon,
+  PaperAirplaneIcon,
+} from "@heroicons/react/solid";
 import { PhotographIcon } from "@heroicons/react/outline";
 import Navbar from "./Navbar";
 import PreviewImage from "../components/PreviewImage";
@@ -56,7 +60,7 @@ const ChatRoom = ({ user }) => {
         sendMessage(event);
     }
 
-    if (formRef && formRef.current) {
+    if (formRef !== null) {
       formRef.current.addEventListener("keydown", submitFormOnCtrlEnter);
       return () =>
         formRef.current.removeEventListener("keydown", submitFormOnCtrlEnter);
