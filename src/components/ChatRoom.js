@@ -172,7 +172,7 @@ const ChatRoom = ({ user }) => {
   }
 
   return (
-    <div className="flex flex-col w-full h-screen justify-between relative lg:mx-auto lg:my-0 ">
+    <div className="flex flex-col w-full gap-0 h-screen justify-between relative lg:mx-auto lg:my-0 ">
       {/* Navbar */}
       <Navbar user={user} />
 
@@ -213,7 +213,7 @@ const ChatRoom = ({ user }) => {
       {/* input form */}
       <form
         ref={formRef}
-        className="sticky bottom-0 z-50 bg-gray-600 dark:text-black px-4 py-2 flex justify-center items-center mt-2 -mb-2 "
+        className="sticky bottom-0 z-50 bg-gray-600 dark:text-black px-4 py-2 flex justify-center items-center -mb-2 "
         onSubmit={sendMessage}
       >
         <textarea
