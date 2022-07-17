@@ -16,6 +16,7 @@ const Navbar = ({ user }) => {
 
       {/* Logout button */}
       <button
+      title="Log out"
         className="p-2 mr-2 capitalize border-2 border-solid bg-red-500 border-red-500 font-medium rounded-full text-white lg:hover:bg-red-500 lg:hover:text-white"
         onClick={() => auth.signOut()}
       >
