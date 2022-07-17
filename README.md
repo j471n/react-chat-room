@@ -1,8 +1,6 @@
-
-# React Chat Room 
+# React Chat Room
 
 It the application which can be use as the group chat or room chat here anyone can login with google and join the chat room and send messages and images through it.
-
 
 ## Features
 
@@ -11,11 +9,10 @@ It the application which can be use as the group chat or room chat here anyone c
 - Fullscreen mode
 - Installable **PWA**
 - Send Images and text
+- Preview Image before Sending
 - Full Responsiveness
-
-  
+- Identify Links
 ## Technologies used
-  
 
 <p>
 
@@ -29,7 +26,6 @@ It the application which can be use as the group chat or room chat here anyone c
 
 [Click Here to see the Live Demo](https://react-chatroom.vercel.app/)
 
-  
 ## Screenshots
 
 ![Login Screen in Desktop](https://i.imgur.com/oCuipy4.png)
@@ -38,11 +34,10 @@ It the application which can be use as the group chat or room chat here anyone c
 <img width="300" src="https://i.imgur.com/lX2x66k.png"/>
 <img width="300" src="https://i.imgur.com/k52vBOD.png"/>
 
-
-  
 ## Run Locally
 
 Create a directory or a folder
+
 ```bash
   mkdir react-chatroom
 ```
@@ -73,19 +68,14 @@ Start the server
   npm run start
 ```
 
-  
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-  
 ## Feedback
 
 If you have any feedback, please reach out to us at jatinsharma089659@gmail.com
 
-  
 ## Developer
 
 - [@j471n](https://github.com/j471n/)
-
-  
