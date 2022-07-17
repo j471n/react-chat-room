@@ -2,10 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import { db, storage } from "../services/firebase";
 import firebase from "firebase";
-import {
-  ArrowCircleRightIcon,
-  PlusIcon,
-} from "@heroicons/react/solid";
+import { ArrowCircleRightIcon, PlusIcon, PaperAirplaneIcon } from "@heroicons/react/solid";
 import { PhotographIcon } from "@heroicons/react/outline";
 import Navbar from "./Navbar";
 import PreviewImage from "../components/PreviewImage";
@@ -29,6 +26,8 @@ const ChatRoom = ({ user }) => {
   let lastSenderId = undefined;
   // For the progress bar
   const [uploadProgress, setUploadProgress] = useState(null);
+  // to send the message through ctrl+enter
+  const formRef = useRef(null);
 
   // This fetch all the messages from the firebase db and set it the message state
   useEffect(() => {
@@ -47,10 +46,27 @@ const ChatRoom = ({ user }) => {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    function submitFormOnCtrlEnter(event) {
+      if (
+        (event.keyCode === 10 || event.keyCode === 13) &&
+        event.ctrlKey &&
+        text.trim()
+      )
+        sendMessage(event);
+    }
+
+    if (formRef && formRef.current) {
+      formRef.current.addEventListener("keydown", submitFormOnCtrlEnter);
+      return () =>
+        formRef.current.removeEventListener("keydown", submitFormOnCtrlEnter);
+    }
+  }, [text, formRef]);
+
   // this identify isSendButton enable or not
   // if input field has a value or the image is selected only then it enables it
   useEffect(() => {
-    if (text || imageToSend) {
+    if (text.trim() || imageToSend) {
       setSendButton(true);
     } else {
       setSendButton(false);
@@ -161,7 +177,7 @@ const ChatRoom = ({ user }) => {
       <Navbar user={user} />
 
       {/* main Chat content */}
-      <div className="flex flex-col px-3 lg:px-20 overflow-x-hidden scrollbar-hide h-4/5">
+      <div className="flex flex-col px-3 overflow-x-hidden scrollbar-hide h-4/5 w-full max-w-5xl mx-auto">
         {messages &&
           messages.map((message) => {
             // It checks do we need to show the name of the sender or not
@@ -196,15 +212,20 @@ const ChatRoom = ({ user }) => {
 
       {/* input form */}
       <form
+        ref={formRef}
         className="sticky bottom-0 z-50 bg-gray-600 dark:text-black px-4 py-2 flex justify-center items-center mt-2 -mb-2 "
         onSubmit={sendMessage}
       >
         <textarea
           type="text"
+          onInput={(e) => {
+            e.target.style.height = "5px";
+            e.target.style.height = e.target.scrollHeight + "px";
+          }}
           placeholder="Type a message..."
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="flex items-center max-w-full w-full h-10 max-h-44 lg:max-w-screen-md py-2 px-5 rounded-full placeholder-gray-500 outline-none resize-none flex-grow scrollbar-hide"
+          className="flex items-center max-w-full w-full max-h-44 h-10 lg:max-w-screen-md py-2 px-5 placeholder-gray-200 text-white outline-none resize-none scrollbar-hide bg-transparent"
         />
 
         {/* 
@@ -213,12 +234,12 @@ const ChatRoom = ({ user }) => {
           - otherwise show the send button  
         */}
         <button
-          className="p-2 text-white bg-blue-400 h-full rounded-full ml-2"
+          className="p-2 text-white bg-blue-500 self-end rounded-full ml-2 grid place-items-center"
           type="submit"
           onClick={sendButton ? sendMessage : () => setShowMenu(!showMenu)}
         >
           {sendButton ? (
-            <ArrowCircleRightIcon className="w-7 h-7" />
+            <PaperAirplaneIcon className="w-7 h-7" />
           ) : (
             <PlusIcon className="w-7 h-7" />
           )}

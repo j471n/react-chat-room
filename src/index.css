@@ -5,12 +5,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;1,500&display=swap");
 
 /* Edge, Firefox */
-*::w {
+* {
   scrollbar-width: none !important;
 }
 
 *::-webkit-scrollbar {
-  width: 0px;
+  width: 0;
 }
 
 @layer components {
