@@ -196,7 +196,7 @@ const ChatRoom = ({ user }) => {
 
       {/* input form */}
       <form
-        className="sticky bottom-0 z-50 bg-gray-600 dark:text-black px-4 py-2 flex justify-center items-center mt-2"
+        className="sticky bottom-0 z-50 bg-gray-600 dark:text-black px-4 py-2 flex justify-center items-center mt-2 -mb-2 "
         onSubmit={sendMessage}
       >
         <textarea
@@ -213,7 +213,7 @@ const ChatRoom = ({ user }) => {
           - otherwise show the send button  
         */}
         <button
-          className="p-2 text-white bg-green-400 h-full rounded-full ml-2"
+          className="p-2 text-white bg-blue-400 h-full rounded-full ml-2"
           type="submit"
           onClick={sendButton ? sendMessage : () => setShowMenu(!showMenu)}
         >
@@ -237,14 +237,14 @@ const ChatRoom = ({ user }) => {
       <div
         className={`${
           !showMenu
-            ? "opacity-0 h-0  overflow-hidden"
-            : "opacity-100 h-auto m-1"
-        } flex justify-center items-center transition-opacity duration-500 ease-in-out `}
+            ? "opacity-0 h-0 m-0  overflow-hidden"
+            : "opacity-100 h-auto mt-5 mb-2"
+        } flex justify-center items-center transition-opacity duration-500 ease-in-out`}
       >
         <div className="flex items-center">
           {/* Photo Picker Container */}
           <div
-            className="p-6 bg-transparent hover:bg-blue-400 border-2 text-blue-400 border-blue-400 border-solid hover:text-white rounded-md cursor-pointer m-1"
+            className="p-6 bg-transparent hover:bg-blue-400 border-2 text-blue-400 border-blue-400 border-solid hover:text-white rounded-md cursor-pointer"
             onClick={imagePicker}
           >
             <PhotographIcon className="base-icon" />

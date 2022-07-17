@@ -4,6 +4,15 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;1,500&display=swap");
 
+/* Edge, Firefox */
+*::w {
+  scrollbar-width: none !important;
+}
+
+*::-webkit-scrollbar {
+  width: 0px;
+}
+
 @layer components {
   .message {
     @apply flex items-end mb-0.5 text-xs sm:text-base;
@@ -28,7 +37,7 @@
   .received > div > section {
     @apply mt-0.5 bg-gray-800 text-white;
   }
-  .base-icon{
+  .base-icon {
     @apply h-8 w-8;
   }
 }
