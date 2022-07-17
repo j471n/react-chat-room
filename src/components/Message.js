@@ -1,5 +1,5 @@
 import React from "react";
-
+import Linkify from "react-linkify";
 import { CheckCircleIcon } from "@heroicons/react/solid";
 
 const Message = ({ user, data, showDetails }) => {
@@ -58,12 +58,14 @@ const Message = ({ user, data, showDetails }) => {
               }}
             />
           )}
-          <p className="break-all">{data.text}</p>
+          <Linkify>
+            <p className="break-all msg">{data.text}</p>
+          </Linkify>
           <div
             style={{ fontSize: "10px" }}
             className="font-mono text-gray-300 flex justify-end items-center pt-0.5"
           >
-            {data.createdAt && (
+            {data.createdAt ? (
               <p>
                 {new Date(data.createdAt?.toDate())
                   .toDateString()
@@ -71,6 +73,8 @@ const Message = ({ user, data, showDetails }) => {
                   ", " +
                   new Date(data.createdAt?.toDate()).toTimeString().slice(0, 5)}
               </p>
+            ) : (
+              <div className="h-1.5 w-16 bg-white rounded-lg animate-pulse"></div>
             )}
 
             {isUserSender && (
