@@ -34,13 +34,16 @@ const ChatRoom = ({ user }) => {
   useEffect(() => {
     const unsubscribe = db
       .collection("messages")
-      .orderBy("createdAt")
+      .orderBy("createdAt", "desc")
+      .limit(150) // only show the last 150 messages
       .onSnapshot((snapshot) => {
         setMessages(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            data: doc.data(),
-          }))
+          snapshot.docs
+            .map((doc) => ({
+              id: doc.id,
+              data: doc.data(),
+            }))
+            .reverse()
         );
       });
 
@@ -107,6 +110,7 @@ const ChatRoom = ({ user }) => {
         displayName: user.displayName,
         photoURL: user.photoURL,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        email: user.email,
       })
       .then((doc) => {
         if (imageToSend) {
@@ -216,7 +220,7 @@ const ChatRoom = ({ user }) => {
       {/* input form */}
       <form
         ref={formRef}
-        className="sticky w-full bottom-0 z-50 bg-gray-600 dark:text-black px-4 py-2 flex justify-center items-center"
+        className="sticky w-full bottom-0 z-50 bg-gray-600 dark:text-black px-5 py-2 flex justify-center gap-4 items-center"
         onSubmit={sendMessage}
       >
         <textarea
@@ -229,7 +233,7 @@ const ChatRoom = ({ user }) => {
           placeholder="Type a message..."
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="flex items-center max-w-full w-full max-h-44 h-10 lg:max-w-screen-md py-2 px-5 placeholder-gray-200 text-white outline-none resize-none scrollbar-hide bg-transparent"
+          className="flex items-center max-w-full w-full max-h-44 h-10 lg:max-w-screen-md py-2 placeholder-gray-200 text-white outline-none resize-none scrollbar-hide bg-transparent"
         />
 
         {/* 
@@ -238,7 +242,7 @@ const ChatRoom = ({ user }) => {
           - otherwise show the send button  
         */}
         <button
-          className="p-2 text-white bg-blue-500 self-end rounded-full ml-2 grid place-items-center"
+          className="p-2 text-white bg-blue-500 self-end rounded-full grid place-items-center"
           type="submit"
           onClick={sendButton ? sendMessage : () => setShowMenu(!showMenu)}
         >

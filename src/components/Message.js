@@ -1,6 +1,7 @@
 import React from "react";
 import Linkify from "react-linkify";
-import { CheckCircleIcon } from "@heroicons/react/solid";
+import { CheckIcon } from "@heroicons/react/solid";
+import { Image } from "react-img-placeholder";
 
 const Message = ({ user, data, showDetails }) => {
   /* 
@@ -26,7 +27,12 @@ const Message = ({ user, data, showDetails }) => {
          */}
 
         {!isUserSender && showDetails && (
-          <div className="flex items-center my-1 mt-2">
+          <a
+            href={`mailto:${data.email || ""}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex items-center my-1 mt-2"
+          >
             <img
               className="rounded-full w-7 h-7"
               width={20}
@@ -34,39 +40,42 @@ const Message = ({ user, data, showDetails }) => {
               src={data.photoURL ? data.photoURL : defaultImg}
               alt=""
             />
-            <div className="font-medium text-gray-500 ml-2 text-sm">
+            <div className="font-medium text-gray-300 ml-2 text-sm">
               <p className="">{data.displayName}</p>
             </div>
-          </div>
+          </a>
         )}
 
         {/* Message Container */}
         <section
-          className={`text-sm bg-black  max-w-xs text-white p-2 relative rounded-xl sm:max-w-lg flex flex-col shadow-md ${
+          className={`text-sm bg-black w-full  max-w-xs text-white p-2 relative rounded-xl sm:max-w-lg flex flex-col shadow-md ${
             !isUserSender && !showDetails && " -mt-6"
           }`}
         >
           {/* If the user sended the image then show the image in the message */}
           {data.sendImage && (
-            <img
-              className="rounded-md max-h-full max-w-full mb-2"
-              src={data.sendImage}
-              alt=""
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = IMAGE_404;
-              }}
-            />
+            <a href={data.sendImage} target="_blank">
+              <Image
+                className="rounded-md max-h-full max-w-full mb-2 w-full"
+                src={data.sendImage}
+                alt="Picture of the author"
+                width={400}
+                height={300}
+                placeholderColor="#333"
+              />
+            </a>
           )}
           <Linkify>
-            <pre className="break-all msg font-poppins text-xs md:text-sm">{data.text}</pre>
+            <pre className="break-all msg font-poppins text-xs md:text-sm">
+              {data.text}
+            </pre>
           </Linkify>
           <div
             style={{ fontSize: "10px" }}
-            className="font-mono text-gray-300 flex justify-end items-center pt-0.5"
+            className=" text-gray-300 flex justify-end items-center pt-0.5"
           >
             {data.createdAt ? (
-              <p>
+              <p className="tracking-tighter font-mono">
                 {new Date(data.createdAt?.toDate())
                   .toDateString()
                   .slice(4, 10) +
@@ -78,9 +87,10 @@ const Message = ({ user, data, showDetails }) => {
             )}
 
             {isUserSender && (
-              <p className="ml-1 text-white">
-                <CheckCircleIcon className="w-4 h-4" />
-              </p>
+              <div className="ml-1 text-white flex items-center">
+                <CheckIcon className="w-4 h-4" />
+                {data.createdAt && <CheckIcon className="w-4 h-4 -ml-3" />}
+              </div>
             )}
           </div>
         </section>
