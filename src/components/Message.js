@@ -29,12 +29,12 @@ const Message = ({ user, data, showDetails }) => {
           <div className="flex items-center my-1 mt-2">
             <img
               className="rounded-full w-7 h-7"
-              width={30}
-              height={30}
+              width={20}
+              height={20}
               src={data.photoURL ? data.photoURL : defaultImg}
               alt=""
             />
-            <div className="font-medium text-gray-500 ml-2">
+            <div className="font-medium text-gray-500 ml-2 text-sm">
               <p className="">{data.displayName}</p>
             </div>
           </div>
@@ -42,7 +42,7 @@ const Message = ({ user, data, showDetails }) => {
 
         {/* Message Container */}
         <section
-          className={`text-sm bg-blue-500 max-w-xs text-white p-2 relative rounded-xl sm:max-w-lg flex flex-col shadow-md ${
+          className={`text-sm bg-black  max-w-xs text-white p-2 relative rounded-xl sm:max-w-lg flex flex-col shadow-md ${
             !isUserSender && !showDetails && " -mt-6"
           }`}
         >
@@ -59,7 +59,7 @@ const Message = ({ user, data, showDetails }) => {
             />
           )}
           <Linkify>
-            <p className="break-all msg">{data.text}</p>
+            <pre className="break-all msg font-poppins text-xs md:text-sm">{data.text}</pre>
           </Linkify>
           <div
             style={{ fontSize: "10px" }}
