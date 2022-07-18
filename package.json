@@ -11,6 +11,7 @@
     "firebase": "^8.10.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-img-placeholder": "^0.1.5",
     "react-linkify": "^1.0.0-alpha",
     "react-scripts": "^4.0.3",
     "react-toastify": "^8.0.3",
